@@ -40,7 +40,7 @@ async function run () {
     { awaitLoad: false }
   )
 
-  console.info(dbMan.dbInfo(db))
+  // console.info(dbMan.dbInfo(db))
 
   db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info({ address, hash, entry, progress, have }))
 
