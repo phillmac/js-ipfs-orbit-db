@@ -7,7 +7,7 @@
   "dependencies": {
     "ipfs": "0.43.3",
     "orbit-db": "phillmac/orbit-db",
-    "orbit-db-managers": "phillmac/orbit-db-managers"
+    "orbit-db-managers": "github:phillmac/orbit-db-managers"
   },
   "license": "MIT",
   "keywords": [
