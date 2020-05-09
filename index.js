@@ -62,10 +62,10 @@ async function run () {
     console.dir({ provs })
     for await (const prov of provs) {
       if (prov.id !== ipfsID && !(peers.some((p) => prov.id === p.peer))) {
-        prov.addrs.map(a => a.toString()).some(a => {
+        prov.addrs.some(a => {
           try {
             ipfs.swarm.connect(a)
-            console.info(`Connected ${prov.id}, ${a}`)
+            console.info(`Connected ${prov.id}, ${a.toString()}`)
           } catch (err) { console.log(err) }
         })
       }
