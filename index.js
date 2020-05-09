@@ -58,9 +58,8 @@ async function run () {
   const connectPeers = async (db) => {
     console.info('Connecting peers')
     const peers = await ipfs.swarm.peers()
-    const provs = ipfs.dht.findProvs(db.address.root)
-    console.dir({ provs })
-    for await (const prov of provs) {
+
+    for await (const prov of ipfs.dht.findProvs(db.address.root)) {
       if (prov.id !== ipfsID && !(peers.some((p) => prov.id === p.peer))) {
         prov.addrs.some(a => {
           try {
