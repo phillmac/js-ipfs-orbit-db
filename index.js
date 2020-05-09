@@ -9,7 +9,7 @@ const multiaddr = require("multiaddr");
 async function init() {
   const ipfs = await Ipfs.create({
     preload: { enabled: true },
-    repo: "./ipfs3",
+    repo: "./ipfs",
     start: false,
     EXPERIMENTAL: { pubsub: true },
     libp2p: { config: { dht: { enabled: true } } },
