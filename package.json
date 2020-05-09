@@ -2,7 +2,7 @@
   "name": "orbitdb-managers-template",
   "version": "1.0.0",
   "scripts": {
-    "dev": "LOG=\"DEBUG\" node index.js"
+    "dev": "LOG=\"DEBUG\" node --unhandled-rejections=strict index.js"
   },
   "dependencies": {
     "ipfs": "0.43.3",
