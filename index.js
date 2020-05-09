@@ -63,7 +63,7 @@ async function run () {
       if (prov.id !== ipfsID && !(peers.some((p) => prov.id === p.peer))) {
         prov.addrs.some(a => {
           try {
-            ipfs.swarm.connect(a)
+            await ipfs.swarm.connect(a)
             console.info(`Connected ${prov.id}, ${a.toString()}`)
           } catch (err) { console.log(err) }
         })
