@@ -6,7 +6,7 @@ const PeerId = require('peer-id')
 const PeerInfo = require('peer-info')
 const multiaddr = require('multiaddr')
 
-async function init () {
+async function run () {
   const ipfs = await Ipfs.create({
     preload: { enabled: true },
     repo: './ipfs',
@@ -39,12 +39,22 @@ async function init () {
   )
 
   const shutdown = async () => {
-    await orbitdb.close()
+    await orbitdb.stop()
     await ipfs.stop()
     process.exit()
   }
 
   process.on('SIGINT', shutdown)
   process.on('beforeExit', shutdown)
+
+
+  const peers = []
+  for await (const p of ipfs.dht.findPeers(db.address.root)) {
+    peers.push(p)
+  }
+
+  console.dir(peers)
+
+
 }
-init()
+run()
