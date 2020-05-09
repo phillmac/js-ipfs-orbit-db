@@ -1,0 +1,15 @@
+{
+  "name": "orbitdb-managers-template",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "LOG=\"DEBUG\" node index.js"
+  },
+  "dependencies": {
+    "ipfs": "0.43.3",
+    "orbit-db": "phillmac/orbit-db",
+    "orbit-db-managers": "phillmac/orbit-db-managers"
+  },
+  "license": "MIT",
+  "keywords": ["ipfs", "orbit-db"],
+  "description": ""
+}
