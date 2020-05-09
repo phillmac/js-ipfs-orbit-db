@@ -23,7 +23,8 @@ async function run () {
   await ipfs.config.profiles.apply('server')
   await ipfs.start()
   await ipfs.ready
-  console.info('ipfs id:', (await ipfs.id()).id)
+  const ipfsID = (await ipfs.id()).id
+  console.info('ipfs id:', ipfsID)
 
   const orbitdb = await OrbitDB.createInstance(ipfs)
   const peerMan = new PeerManager(ipfs, orbitdb, {
@@ -58,10 +59,9 @@ async function run () {
   const peers = []
   for await (const p of ipfs.dht.findProvs(db.address.root)) {
     peers.push(p)
-    console.info(p.id, (await ipfs.id().id), p.id !== (await ipfs.id().id) )
-    // if(p.id !== (await ipfs.id().id)) {
-    //   p.addrs.forEach(a => console.info(p.id, a.toString()))
-    // }
+    if(p.id !== ipfsID) {
+      p.addrs.forEach(a => console.info(p.id, a.toString()))
+    }
   }
 }
 run()
