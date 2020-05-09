@@ -45,23 +45,27 @@ async function run () {
   db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info({ address, hash, entry, progress, have }))
 
   const shutdown = async () => {
-    console.info("Stopping...")
+    console.info('Stopping...')
     await orbitdb.stop()
     await ipfs.stop()
+    console.info('Done')
     process.exit()
-    console.info("Done")
   }
 
   process.on('SIGINT', shutdown)
   process.on('beforeExit', shutdown)
 
-  console.info('Finding peers')
-  const peers = []
-  for await (const p of ipfs.dht.findProvs(db.address.root)) {
-    peers.push(p)
-    if(p.id !== ipfsID) {
-      p.addrs.forEach(a => console.info(p.id, a.toString()))
+  const findPeers = async (db) => {
+    console.info('Finding peers')
+    const peers = []
+    for await (const p of ipfs.dht.findProvs(db.address.root)) {
+      peers.push(p)
+      if (p.id !== ipfsID) {
+        p.addrs.forEach(a => console.info(p.id, a.toString()))
+      }
     }
   }
+
+  setInterval(() => findPeers(db), 300 * 1000)
 }
 run()
