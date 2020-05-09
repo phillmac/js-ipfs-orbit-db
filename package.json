@@ -10,6 +10,9 @@
     "orbit-db-managers": "phillmac/orbit-db-managers"
   },
   "license": "MIT",
-  "keywords": ["ipfs", "orbit-db"],
+  "keywords": [
+    "ipfs",
+    "orbit-db"
+  ],
   "description": ""
 }
