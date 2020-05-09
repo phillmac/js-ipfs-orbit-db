@@ -61,12 +61,13 @@ async function run () {
 
     for await (const prov of ipfs.dht.findProvs(db.address.root)) {
       if (prov.id !== ipfsID && !(peers.some((p) => prov.id === p.peer))) {
-        prov.addrs.some(a => {
+        for (const a of prov.addrs) {
           try {
             await ipfs.swarm.connect(a)
             console.info(`Connected ${prov.id}, ${a.toString()}`)
+            break
           } catch (err) { console.log(err) }
-        })
+        }
       }
     }
   }
