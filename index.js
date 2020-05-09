@@ -49,7 +49,7 @@ async function run () {
 
 
   const peers = []
-  for await (const p of ipfs.dht.findPeers(db.address.root)) {
+  for await (const p of ipfs.dht.findProvs(db.address.root)) {
     peers.push(p)
   }
 
