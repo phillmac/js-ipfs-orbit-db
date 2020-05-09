@@ -23,6 +23,7 @@ async function run () {
   await ipfs.config.profiles.apply('server')
   await ipfs.start()
   await ipfs.ready
+  console.info('ipfs id:', (await ipfs.id()).id)
 
   const orbitdb = await OrbitDB.createInstance(ipfs)
   const peerMan = new PeerManager(ipfs, orbitdb, {
@@ -38,6 +39,10 @@ async function run () {
     { awaitLoad: false }
   )
 
+  console.info(dbMan.dbInfo(db))
+
+  db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info({ address, hash, entry, progress, have }))
+
   const shutdown = async () => {
     await orbitdb.stop()
     await ipfs.stop()
@@ -47,14 +52,11 @@ async function run () {
   process.on('SIGINT', shutdown)
   process.on('beforeExit', shutdown)
 
-
+  console.info('Finding peers')
   const peers = []
   for await (const p of ipfs.dht.findProvs(db.address.root)) {
     peers.push(p)
+    p.addrs.forEach(a => console.info(a.toString()))
   }
-
-  console.dir(peers)
-
-
 }
 run()
