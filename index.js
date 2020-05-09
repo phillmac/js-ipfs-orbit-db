@@ -55,17 +55,23 @@ async function run () {
   process.on('SIGINT', shutdown)
   process.on('beforeExit', shutdown)
 
-  const findPeers = async (db) => {
-    console.info('Finding peers')
-    const peers = []
-    for await (const p of ipfs.dht.findProvs(db.address.root)) {
-      peers.push(p)
-      if (p.id !== ipfsID) {
-        p.addrs.forEach(a => console.info(p.id, a.toString()))
+  const connectPeers = async (db) => {
+    console.info('Connecting peers')
+    const peers = await ipfs.swarm.peers()
+    const provs = ipfs.dht.findProvs(db.address.root)
+    console.dir({ provs })
+    for await (const prov of provs) {
+      if (prov.id !== ipfsID && !(peers.some((p) => prov.id === p.peer))) {
+        prov.addrs.map(a => a.toString()).some(a => {
+          try {
+            ipfs.swarm.connect(a)
+            console.info(`Connected ${prov.id}, ${a}`)
+          } catch (err) { console.log(err) }
+        })
       }
     }
   }
 
-  setInterval(() => findPeers(db), 300 * 1000)
+  setInterval(() => connectPeers(db), 300 * 1000)
 }
 run()
