@@ -42,7 +42,7 @@ async function run () {
 
   // console.info(dbMan.dbInfo(db))
 
-  db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info({ address, hash, entry, progress, have }))
+  db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info("replicate.progress:", { address, hash, entry, progress, have }))
 
   const shutdown = async () => {
     console.info('Stopping...')
