@@ -85,5 +85,6 @@ async function run () {
   }
 
   setInterval(() => connectPeers(db), 300 * 1000)
+  connectPeers(db)
 }
 run()
