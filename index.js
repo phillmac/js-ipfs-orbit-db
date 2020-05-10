@@ -73,6 +73,6 @@ async function run () {
     }
   }
 
-  setInterval(() => connectPeers(db), 300 * 1000)
+  setInterval(() => connectPeers(db).catch(err => console.error(err)), 300 * 1000)
 }
 run()
