@@ -8,7 +8,7 @@ const multiaddr = require('multiaddr')
 
 async function run () {
   const ipfs = await Ipfs.create({
-    preload: { enabled: true },
+    preload: { enabled: false },
     repo: './ipfs',
     start: false,
     EXPERIMENTAL: { pubsub: true },
