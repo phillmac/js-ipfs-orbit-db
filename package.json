@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "LOG=\"DEBUG\" DEBUG=\"*\" node --unhandled-rejections=strict index.js"
+    "dev": "LOG=\"DEBUG\" node index.js | tee ~/log_$(date \"+%s\").txt"
   },
   "dependencies": {
     "ipfs": "0.43.3",
