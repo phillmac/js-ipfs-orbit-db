@@ -14,9 +14,9 @@ async function run () {
     EXPERIMENTAL: { pubsub: true },
     libp2p: { config: { dht: { enabled: true } } },
     relay: {
-      enabled: true, // enable relay dialer/listener (STOP)
+      enabled: false, // enable relay dialer/listener (STOP)
       hop: {
-        enabled: true // make this node a relay (HOP)
+        enabled: false // make this node a relay (HOP)
       }
     }
   })
@@ -57,22 +57,33 @@ async function run () {
 
   const connectPeers = async (db) => {
     console.info('Connecting peers')
-    const peers = await ipfs.swarm.peers()
-
-    for await (const prov of ipfs.dht.findProvs(db.address.root)) {
-      if (prov.id !== ipfsID && !(peers.some((p) => prov.id === p.peer))) {
-        for (const a of prov.addrs.map(a => `${a.toString()}/ipfs/${prov.id}`)) {
-          try {
-            console.info(`Connecting ${a}`)
-            await ipfs.swarm.connect(a)
-            console.info(`Connected ${prov.id}`)
-            break
-          } catch (err) { console.log(err) }
+    let peers
+    try {
+      peers = await ipfs.swarm.peers()
+    } catch (err) {
+      console.error('Error fetching swarm peers', err)
+    }
+    if (peers) {
+      try {
+        for await (const prov of ipfs.dht.findProvs(db.address.root)) {
+          if (prov.id !== ipfsID && !(peers.some((p) => prov.id === p.peer))) {
+            for (const a of prov.addrs.map(a => `${a.toString()}/ipfs/${prov.id}`)) {
+              try {
+                console.info(`Connecting ${a}`)
+                await ipfs.swarm.connect(a)
+                console.info(`Connected ${prov.id}`)
+                break
+              } catch (err) { console.log(err) }
+            }
+          }
         }
+      } catch (err) {
+        console.error('Error while connecting peers', err)
       }
     }
+    console.info('Done')
   }
 
-  setInterval(() => connectPeers(db).catch(err => console.error(err)), 300 * 1000)
+  setInterval(() => connectPeers(db), 300 * 1000)
 }
 run()
