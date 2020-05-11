@@ -51,6 +51,8 @@ async function run () {
       } catch (err) {
         console.error('Error while connecting peers', err)
       }
+    } else {
+        console.error("No peers available")
     }
     console.info('Done')
   }
