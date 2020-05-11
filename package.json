@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "LOG=\"DEBUG\" node index.js | tee ~/log_$(date \"+%s\").txt"
+    "js": "LOG=\"DEBUG\" node js-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
+    "go": "LOG=\"DEBUG\" node go-ipfs.js | tee ~/go_log_$(date \"+%s\").txt"
+
   },
   "dependencies": {
     "go-ipfs-dep": "^0.5.0",
