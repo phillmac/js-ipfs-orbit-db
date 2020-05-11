@@ -1,4 +1,4 @@
-const Ctl = require("ipfsd-ctl");
+const Ctl = require('ipfsd-ctl')
 const OrbitDB = require('orbit-db')
 const { PeerManager, DBManager } = require('orbit-db-managers')
 const PeerStore = require('libp2p/src/peer-store')
@@ -8,9 +8,9 @@ const multiaddr = require('multiaddr')
 
 async function run () {
   const ipfsd = await Ctl.createController({
-    ipfsHttpModule: require("ipfs-http-client"),
-    ipfsBin: require("go-ipfs-dep").path(),
-    args: ["--enable-pubsub-experiment"]
+    ipfsHttpModule: require('ipfs-http-client'),
+    ipfsBin: require('go-ipfs-dep').path(),
+    args: ['--enable-pubsub-experiment']
   })
   const ipfs = ipfsd.api
   await ipfs.config.profiles.apply('server')
@@ -25,6 +25,10 @@ async function run () {
     multiaddr,
     PeerStore
   })
+
+  const hash = 'zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5'
+  setInterval(() => connectPeers(hash), 300 * 1000)
+  await connectPeers(hash)
   const dbMan = new DBManager(orbitdb, peerMan, { logger: console })
 
   const db = await dbMan.openCreate(
@@ -34,7 +38,7 @@ async function run () {
 
   // console.info(dbMan.dbInfo(db))
 
-  db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info("replicate.progress:", { address, hash, entry, progress, have }))
+  db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
 
   const shutdown = async () => {
     console.info('Stopping...')
@@ -47,7 +51,7 @@ async function run () {
   process.on('SIGINT', shutdown)
   process.on('beforeExit', shutdown)
 
-  const connectPeers = async (db) => {
+  const connectPeers = async (hash) => {
     console.info('Connecting peers')
     let peers
     try {
@@ -57,7 +61,7 @@ async function run () {
     }
     if (peers) {
       try {
-        for await (const prov of ipfs.dht.findProvs(db.address.root)) {
+        for await (const prov of ipfs.dht.findProvs(hash)) {
           if (prov.id !== ipfsID && !(peers.some((p) => prov.id === p.peer))) {
             for (const a of prov.addrs.map(a => `${a.toString()}/ipfs/${prov.id}`)) {
               try {
@@ -75,8 +79,5 @@ async function run () {
     }
     console.info('Done')
   }
-
-  setInterval(() => connectPeers(db), 300 * 1000)
-  connectPeers(db)
 }
 run()
