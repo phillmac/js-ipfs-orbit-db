@@ -5,10 +5,9 @@
   "scripts": {
     "js": "LOG=\"DEBUG\" node js-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
     "go": "LOG=\"DEBUG\" node go-ipfs.js | tee ~/go_log_$(date \"+%s\").txt"
-
   },
   "dependencies": {
-    "go-ipfs-dep": "^0.5.0",
+    "go-ipfs-dep": "^0.4.23-3",
     "ipfs": "0.43.3",
     "ipfs-http-client": "^44.0.3",
     "ipfsd-ctl": "^4.1.0",
