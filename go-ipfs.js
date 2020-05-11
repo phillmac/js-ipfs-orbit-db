@@ -26,31 +26,6 @@ async function run () {
     PeerStore
   })
 
-  const hash = 'zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5'
-  setInterval(() => connectPeers(hash), 300 * 1000)
-  await connectPeers(hash)
-  const dbMan = new DBManager(orbitdb, peerMan, { logger: console })
-
-  const db = await dbMan.openCreate(
-    '/orbitdb/zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5/keyvalue_test',
-    { awaitLoad: false }
-  )
-
-  // console.info(dbMan.dbInfo(db))
-
-  db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
-
-  const shutdown = async () => {
-    console.info('Stopping...')
-    await orbitdb.stop()
-    await ipfsd.stop()
-    console.info('Done')
-    process.exit()
-  }
-
-  process.on('SIGINT', shutdown)
-  process.on('beforeExit', shutdown)
-
   const connectPeers = async (hash) => {
     console.info('Connecting peers')
     let peers
@@ -79,5 +54,32 @@ async function run () {
     }
     console.info('Done')
   }
+
+  const hash = 'zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5'
+  setInterval(() => connectPeers(hash), 300 * 1000)
+  await connectPeers(hash)
+  const dbMan = new DBManager(orbitdb, peerMan, { logger: console })
+
+  const db = await dbMan.openCreate(
+    '/orbitdb/zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5/keyvalue_test',
+    { awaitLoad: false }
+  )
+
+  // console.info(dbMan.dbInfo(db))
+
+  db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
+
+  const shutdown = async () => {
+    console.info('Stopping...')
+    await orbitdb.stop()
+    await ipfsd.stop()
+    console.info('Done')
+    process.exit()
+  }
+
+  process.on('SIGINT', shutdown)
+  process.on('beforeExit', shutdown)
+
+  
 }
 run()
