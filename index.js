@@ -14,7 +14,7 @@ async function run () {
     EXPERIMENTAL: { pubsub: true },
     libp2p: { config: { dht: { enabled: true } } },
     relay: {
-      enabled: false, // enable relay dialer/listener (STOP)
+      enabled: true, // enable relay dialer/listener (STOP)
       hop: {
         enabled: false // make this node a relay (HOP)
       }
