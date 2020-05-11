@@ -60,10 +60,17 @@ async function run () {
   await connectPeers(hash)
   const dbMan = new DBManager(orbitdb, peerMan, { logger: console })
 
-  const db = await dbMan.openCreate(
-    '/orbitdb/zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5/keyvalue_test',
-    { awaitLoad: false }
-  )
+  let db
+  while (!db) {
+    try {
+      db = await dbMan.openCreate(
+        '/orbitdb/zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5/keyvalue_test',
+        { awaitLoad: false }
+      )
+    } catch (err) {
+      console.err(err)
+    }
+  }
 
   // console.info(dbMan.dbInfo(db))
 
@@ -79,7 +86,5 @@ async function run () {
 
   process.on('SIGINT', shutdown)
   process.on('beforeExit', shutdown)
-
-  
 }
 run()
