@@ -14,7 +14,6 @@ async function run () {
   })
   const ipfs = ipfsd.api
   await ipfs.config.profiles.apply('server')
-  await ipfs.start()
   await ipfs.ready
   const ipfsID = (await ipfs.id()).id
   console.info('ipfs id:', ipfsID)
