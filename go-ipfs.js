@@ -68,7 +68,7 @@ async function run () {
         { awaitLoad: false }
       )
     } catch (err) {
-      console.err(err)
+      console.error(err)
     }
   }
 
