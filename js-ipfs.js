@@ -10,7 +10,7 @@ const { EventEmitter } = require('events')
 async function run () {
   const ipfs = await Ipfs.create({
     preload: { enabled: true },
-    repo: './ipfs',
+    repo: './js-ipfs',
     start: false,
     EXPERIMENTAL: { pubsub: true },
     libp2p: { config: { dht: { enabled: true } } },
@@ -27,7 +27,7 @@ async function run () {
   const ipfsID = (await ipfs.id()).id
   console.info('ipfs id:', ipfsID)
 
-  const orbitdb = await OrbitDB.createInstance(ipfs)
+  const orbitdb = await OrbitDB.createInstance(ipfs, {directory:'js-ipfs-orbitdb'})
   const peerMan = new PeerManager(ipfs, orbitdb, {
     PeerId,
     PeerInfo,
