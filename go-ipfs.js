@@ -19,7 +19,7 @@ async function run () {
   const ipfsID = (await ipfs.id()).id
   console.info('ipfs id:', ipfsID)
 
-  const orbitdb = await OrbitDB.createInstance(ipfs, {directory: 'go-ipfs-orbitdb'})
+  const orbitdb = await OrbitDB.createInstance(ipfs, { directory: 'go-ipfs-orbitdb' })
   const peerMan = new PeerManager(ipfs, orbitdb, {
     PeerId,
     PeerInfo,
@@ -38,7 +38,7 @@ async function run () {
     }
     if (peers) {
       try {
-        for (const prov of await peerMan.findPeers(db)) {
+        for (const prov of await peerMan.findPeers(db).search) {
           if (prov.id !== ipfsID && !(peers.some((p) => prov.id === p.peer))) {
             for (const a of prov.addrs.map(a => `${a.toString()}/ipfs/${prov.id}`)) {
               try {
@@ -59,25 +59,7 @@ async function run () {
     console.info('Done')
   }
 
-
   const dbMan = new DBManager(orbitdb, peerMan, { logger: console })
-
-  let db
-  while (!db) {
-    try {
-      db = await dbMan.openCreate(
-        '/orbitdb/zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5/keyvalue_test',
-        { awaitOpen: false }
-        )
-        connectPeers(db)
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
-  // console.info(dbMan.dbInfo(db))
-
-  db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
 
   const shutdown = async () => {
     console.info('Stopping...')
@@ -90,7 +72,22 @@ async function run () {
   process.on('SIGINT', shutdown)
   process.on('beforeExit', shutdown)
 
+  let opened = false
+  while (!opened) {
+    try {
+      const db = await dbMan.openCreate(
+        '/orbitdb/zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5/keyvalue_test',
+        { awaitOpen: false, relayEvents: ['replicate.progress'] }
+      )
+      connectPeers(db)
+      opened = true
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  orbitdb.events.on('replicate.progress', (_addr, address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
+
   setInterval(() => connectPeers(dbMan.get('keyvalue_test')), 300 * 1000)
-  connectPeers(db)
 }
 run()
