@@ -58,6 +58,7 @@ async function run () {
   // console.info(dbMan.dbInfo(db))
 
   db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
+  db.events.on('replicated', () => shutdown())
 
   const connectPeers = async (db) => {
     console.info('Connecting peers')

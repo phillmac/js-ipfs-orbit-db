@@ -77,7 +77,7 @@ async function run () {
     try {
       const db = await dbMan.openCreate(
         '/orbitdb/zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5/keyvalue_test',
-        { awaitOpen: false, relayEvents: ['replicate.progress'] }
+        { awaitOpen: false, relayEvents: ['replicate.progress', 'replicated'] }
       )
       connectPeers(db)
       opened = true
@@ -87,6 +87,7 @@ async function run () {
   }
 
   orbitdb.events.on('replicate.progress', (_addr, address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
+  orbitdb.events.on('replicated', () => shutdown())
 
   setInterval(() => connectPeers(dbMan.get('keyvalue_test')), 300 * 1000)
 }
