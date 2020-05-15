@@ -19,7 +19,7 @@ async function run () {
   const ipfsID = (await ipfs.id()).id
   console.info('ipfs id:', ipfsID)
 
-  const orbitdb = await OrbitDB.createInstance(ipfs)
+  const orbitdb = await OrbitDB.createInstance(ipfs, {directory: 'go-ipfs-orbitdb'})
   const peerMan = new PeerManager(ipfs, orbitdb, {
     PeerId,
     PeerInfo,
@@ -28,7 +28,7 @@ async function run () {
     EventEmitter
   })
 
-  const connectPeers = async (hash) => {
+  const connectPeers = async (db) => {
     console.info('Connecting peers')
     let peers
     try {
@@ -38,7 +38,7 @@ async function run () {
     }
     if (peers) {
       try {
-        for await (const prov of ipfs.dht.findProvs(hash)) {
+        for (const prov of peerMan.findPeers(db)) {
           if (prov.id !== ipfsID && !(peers.some((p) => prov.id === p.peer))) {
             for (const a of prov.addrs.map(a => `${a.toString()}/ipfs/${prov.id}`)) {
               try {
@@ -59,9 +59,7 @@ async function run () {
     console.info('Done')
   }
 
-  const hash = 'zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5'
-  setInterval(() => connectPeers(hash), 300 * 1000)
-  await connectPeers(hash)
+
   const dbMan = new DBManager(orbitdb, peerMan, { logger: console })
 
   let db
@@ -69,8 +67,9 @@ async function run () {
     try {
       db = await dbMan.openCreate(
         '/orbitdb/zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5/keyvalue_test',
-        { awaitLoad: false }
-      )
+        { awaitOpen: false }
+        )
+        connectPeers(db)
     } catch (err) {
       console.error(err)
     }
@@ -90,5 +89,8 @@ async function run () {
 
   process.on('SIGINT', shutdown)
   process.on('beforeExit', shutdown)
+
+  setInterval(() => connectPeers(dbMan.get('keyvalue_test')), 300 * 1000)
+  connectPeers(db)
 }
 run()
