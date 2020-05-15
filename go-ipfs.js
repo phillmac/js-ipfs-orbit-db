@@ -5,6 +5,7 @@ const PeerStore = require('libp2p/src/peer-store')
 const PeerId = require('peer-id')
 const PeerInfo = require('peer-info')
 const multiaddr = require('multiaddr')
+const { EventEmitter } = require('events')
 
 async function run () {
   const ipfsd = await Ctl.createController({
@@ -23,7 +24,8 @@ async function run () {
     PeerId,
     PeerInfo,
     multiaddr,
-    PeerStore
+    PeerStore,
+    EventEmitter
   })
 
   const connectPeers = async (hash) => {
@@ -52,7 +54,7 @@ async function run () {
         console.error('Error while connecting peers', err)
       }
     } else {
-        console.error("No peers available")
+      console.error('No peers available')
     }
     console.info('Done')
   }

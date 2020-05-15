@@ -5,6 +5,7 @@ const PeerStore = require('libp2p/src/peer-store')
 const PeerId = require('peer-id')
 const PeerInfo = require('peer-info')
 const multiaddr = require('multiaddr')
+const { EventEmitter } = require('events')
 
 async function run () {
   const ipfs = await Ipfs.create({
@@ -31,7 +32,8 @@ async function run () {
     PeerId,
     PeerInfo,
     multiaddr,
-    PeerStore
+    PeerStore,
+    EventEmitter
   })
   const dbMan = new DBManager(orbitdb, peerMan, { logger: console })
 
