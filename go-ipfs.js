@@ -25,7 +25,9 @@ async function run () {
     PeerInfo,
     multiaddr,
     PeerStore,
-    EventEmitter
+    EventEmitter,
+    logger: console
+
   })
 
   const connectPeers = async (db) => {

@@ -33,7 +33,8 @@ async function run () {
     PeerInfo,
     multiaddr,
     PeerStore,
-    EventEmitter
+    EventEmitter,
+    logger: console
   })
   const dbMan = new DBManager(orbitdb, peerMan, { logger: console })
 
