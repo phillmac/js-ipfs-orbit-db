@@ -67,7 +67,7 @@ async function run () {
     }
     if (peers) {
       try {
-        for await (const prov of ipfs.dht.findProvs(db.address.root)) {
+        for (const prov of await peerMan.findPeers(db)) {
           if (prov.id !== ipfsID && !(peers.some((p) => prov.id === p.peer))) {
             for (const a of prov.addrs.map(a => `${a.toString()}/ipfs/${prov.id}`)) {
               try {
