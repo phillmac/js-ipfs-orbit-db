@@ -38,7 +38,6 @@ async function run () {
   })
   const dbMan = new DBManager(orbitdb, peerMan, { logger: console })
 
-
   const shutdown = async () => {
     console.info('Stopping...')
     await orbitdb.stop()
@@ -50,7 +49,6 @@ async function run () {
   process.on('SIGINT', shutdown)
   process.on('beforeExit', shutdown)
 
-
   const db = await dbMan.openCreate(
     '/orbitdb/zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5/keyvalue_test',
     { awaitLoad: false }
@@ -58,8 +56,13 @@ async function run () {
 
   // console.info(dbMan.dbInfo(db))
 
-  db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
-  db.events.on('replicated', () => shutdown())
+  setInterval(() => console.dir({
+    open: dbMan.pendingOpens(),
+    ready: dbMan.pendingReady(),
+    load: dbMan.pendingLoad()
+  }), 5 * 1000)
+  // db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
+  // db.events.on('replicated', () => shutdown())
 
   const connectPeers = async (db) => {
     console.info('Connecting peers')
