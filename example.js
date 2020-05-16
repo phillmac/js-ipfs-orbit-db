@@ -55,19 +55,19 @@ function example (ipfs, stopIpfs) {
     }
 
     // orbitdb.events.on('replicate.progress', (_addr, address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
-    orbitdb.events.on('replicated', () => {
+    setInterval(() => {
       try {
         const db = dbMan.get('keyvalue_test')
         const replicationStatus = db.replicationStatus
+        console.info({ replicationStatus })
         if (replicationStatus.progress === replicationStatus.max) {
           console.info('Fully replicated')
-          console.info({ replicationStatus })
           shutdown()
         }
       } catch (err) {
         console.log(err)
       }
-    })
+    }, 5 * 1000)
 
     setInterval(() => connectPeers(dbMan.get('keyvalue_test')), 300 * 1000)
   }
