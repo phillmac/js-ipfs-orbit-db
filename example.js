@@ -25,8 +25,12 @@ function example (ipfs, stopIpfs) {
 
     const shutdown = async () => {
       console.info('Stopping...')
-      await orbitdb.stop()
-      await stopIpfs()
+      try {
+        await orbitdb.stop()
+        await stopIpfs()
+      } catch (err) {
+        console.error(err)
+      }
       console.info('Done')
       process.exit()
     }
