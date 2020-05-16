@@ -71,7 +71,7 @@ async function run () {
     }  catch (err) {
         console.log(err)
     }
-  }
+  })
 
   setInterval(() => connectPeers(dbMan.get('keyvalue_test')), 300 * 1000)
 }
