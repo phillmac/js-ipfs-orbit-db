@@ -77,7 +77,7 @@ async function run () {
         for (const prov of await peerMan.findPeers(db).search) {
           console.dir(prov)
           if (prov.id !== ipfsID && !(peers.some((p) => prov.id === p.peer))) {
-            for (const a of prov.addrs.map(a => `${a.toString()}/ipfs/${prov.id}`)) {
+            for (const a of prov.multiaddrs.map(a => `${a.toString()}/ipfs/${prov.id}`)) {
               try {
                 console.info(`Connecting ${a}`)
                 await ipfs.swarm.connect(a)
