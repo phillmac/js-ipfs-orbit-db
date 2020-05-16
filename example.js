@@ -40,15 +40,16 @@ function example (ipfs, stopIpfs) {
 
     const connectPeers = require('./connectPeers.js')({ ipfs, peerMan, ipfsID })
 
-    let opened = false
-    while (!opened) {
+    let success = false
+    while (!success) {
       try {
         const db = await dbMan.openCreate(
           '/orbitdb/zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5/keyvalue_test',
           { awaitOpen: false, relayEvents: ['ready', 'replicate.progress', 'replicated'] }
         )
+        success = true
+        setInterval(() => connectPeers(db), 300 * 1000)
         connectPeers(db)
-        opened = true
       } catch (err) {
         console.error(err)
       }
@@ -83,13 +84,6 @@ function example (ipfs, stopIpfs) {
         }
       }, 5 * 1000)
     })
-
-    setInterval(() => {
-      const db = dbMan.get('keyvalue_test')
-      if (db) {
-        connectPeers(db)
-      }
-    }, 300 * 1000)
   }
 }
 
