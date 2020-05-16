@@ -10,7 +10,7 @@ async function run () {
   await ipfs.config.profiles.apply('server')
   await ipfs.ready
 
-  const example = require('./example.js')(ipfs, ipfsd.stop)
+  const example = require('./example.js')(ipfs, () => ipfsd.stop())
   example()
 }
 run()

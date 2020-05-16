@@ -18,7 +18,7 @@ async function run () {
   await ipfs.start()
   await ipfs.ready
 
-  const example = require('./example.js')(ipfs, ipfs.stop)
+  const example = require('./example.js')(ipfs,  () => ipfs.stop())
   example()
 }
 run()
