@@ -56,11 +56,11 @@ async function run () {
 
   // console.info(dbMan.dbInfo(db))
 
-  setInterval(() => console.dir({
-    open: dbMan.pendingOpens(),
-    ready: dbMan.pendingReady(),
-    load: dbMan.pendingLoad()
-  }), 5 * 1000)
+  //   setInterval(() => console.dir({
+  //     open: dbMan.pendingOpens(),
+  //     ready: dbMan.pendingReady(),
+  //     load: dbMan.pendingLoad()
+  //   }), 5 * 1000)
   // db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
   // db.events.on('replicated', () => shutdown())
 
@@ -75,6 +75,7 @@ async function run () {
     if (peers) {
       try {
         for (const prov of await peerMan.findPeers(db).search) {
+          console.dir(prov)
           if (prov.id !== ipfsID && !(peers.some((p) => prov.id === p.peer))) {
             for (const a of prov.addrs.map(a => `${a.toString()}/ipfs/${prov.id}`)) {
               try {
