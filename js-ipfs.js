@@ -64,7 +64,7 @@ async function run () {
   // db.events.on('replicate.progress', (address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
   // db.events.on('replicated', () => shutdown())
 
-  const connectPeers = require('connectPeers.js')({ ipfs, peerMan, ipfsID })
+  const connectPeers = require('./connectPeers.js')({ ipfs, peerMan, ipfsID })
 
   setInterval(() => connectPeers(db), 300 * 1000)
   connectPeers(db, ipfs, ipfsID)

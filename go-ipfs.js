@@ -43,7 +43,7 @@ async function run () {
   process.on('SIGINT', shutdown)
   process.on('beforeExit', shutdown)
 
-  const connectPeers = require('connectPeers.js')({ ipfs, peerMan, ipfsID })
+  const connectPeers = require('./connectPeers.js')({ ipfs, peerMan, ipfsID })
 
   let opened = false
   while (!opened) {
