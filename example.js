@@ -84,7 +84,12 @@ function example (ipfs, stopIpfs) {
       }, 5 * 1000)
     })
 
-    setInterval(() => connectPeers(dbMan.get('keyvalue_test')), 300 * 1000)
+    setInterval(() => {
+      const db = dbMan.get('keyvalue_test')
+      if (db) {
+        connectPeers(db)
+      }
+    }, 300 * 1000)
   }
 }
 
