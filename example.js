@@ -63,7 +63,7 @@ function example (ipfs, stopIpfs) {
           if (db) {
             const replicationStatus = db.replicationStatus
             console.info({ replicationStatus })
-            if (replicationStatus.progress === replicationStatus.max) {
+            if (replicationStatus.progress === replicationStatus.max && replicationStatus.max > 0) {
               console.info('Fully replicated')
               shutdown()
             }
