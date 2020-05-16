@@ -19,7 +19,7 @@ const connectPeers = function (options) {
                 await ipfs.swarm.connect(a)
                 console.info(`Connected ${provId}`)
                 break
-              } catch (err) { console.log(err) }
+              } catch (err) { }
             }
           }
         }
