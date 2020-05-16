@@ -66,6 +66,7 @@ async function run () {
         const replicationStatus = db.replicationStatus
         if(replicationStatus.progress === replicationStatus.max) {
             console.info('Fully replicated')
+            console.info({replicationStatus})
             shutdown()
         }
     }  catch (err) {
