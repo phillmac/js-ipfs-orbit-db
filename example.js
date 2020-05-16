@@ -65,6 +65,8 @@ function example (ipfs, stopIpfs) {
             console.info({ replicationStatus })
             if (replicationStatus.progress === replicationStatus.max && replicationStatus.max > 0) {
               console.info('Fully replicated')
+              const dbKeys = Object.keys(db.all)
+              console.info(`Keys in db: ${dbKeys.length}`)
               shutdown()
             }
           }
