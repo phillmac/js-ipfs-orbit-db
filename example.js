@@ -70,7 +70,7 @@ function example (ipfs, stopIpfs) {
               const dbKeys = Object.keys(db.all)
               console.info(`Keys in db: ${dbKeys.length}`)
               const sample = {}
-              while (sample.length < 10) {
+              while (sample.length < 5) {
                 const rk = dbKeys[Math.floor(Math.random() * dbKeys.length)]
                 const sk = db.get(rk)
                 if (!(sk in sample)) sample[rk] = sk
