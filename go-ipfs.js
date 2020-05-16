@@ -59,8 +59,19 @@ async function run () {
     }
   }
 
-  orbitdb.events.on('replicate.progress', (_addr, address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
-  orbitdb.events.on('replicated', () => shutdown())
+  //orbitdb.events.on('replicate.progress', (_addr, address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
+  orbitdb.events.on('replicated', () => {
+    try {
+        const db = dbMan.get('keyvalue_test')
+        const replicationStatus = db.replicationStatus
+        if(replicationStatus.progress === replicationStatus.max) {
+            console.info('Fully replicated')
+            shutdown()
+        }
+    }  catch (err) {
+        console.log(err)
+    }
+  }
 
   setInterval(() => connectPeers(dbMan.get('keyvalue_test')), 300 * 1000)
 }
