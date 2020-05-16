@@ -45,7 +45,7 @@ function example (ipfs, stopIpfs) {
       try {
         const db = await dbMan.openCreate(
           '/orbitdb/zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5/keyvalue_test',
-          { awaitOpen: false, relayEvents: ['replicate.progress', 'replicated'] }
+          { awaitOpen: false, relayEvents: ['ready', 'replicate.progress', 'replicated'] }
         )
         connectPeers(db)
         opened = true
@@ -55,19 +55,24 @@ function example (ipfs, stopIpfs) {
     }
 
     // orbitdb.events.on('replicate.progress', (_addr, address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
-    setInterval(() => {
-      try {
-        const db = dbMan.get('keyvalue_test')
-        const replicationStatus = db.replicationStatus
-        console.info({ replicationStatus })
-        if (replicationStatus.progress === replicationStatus.max) {
-          console.info('Fully replicated')
-          shutdown()
+    orbitdb.events.once('ready', (...args) => {
+      console.dir(args)
+      setInterval(() => {
+        try {
+          const db = dbMan.get('keyvalue_test')
+          if (db) {
+            const replicationStatus = db.replicationStatus
+            console.info({ replicationStatus })
+            if (replicationStatus.progress === replicationStatus.max) {
+              console.info('Fully replicated')
+              shutdown()
+            }
+          }
+        } catch (err) {
+          console.log(err)
         }
-      } catch (err) {
-        console.log(err)
-      }
-    }, 5 * 1000)
+      }, 5 * 1000)
+    })
 
     setInterval(() => connectPeers(dbMan.get('keyvalue_test')), 300 * 1000)
   }
