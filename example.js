@@ -63,10 +63,18 @@ function example (ipfs, stopIpfs) {
           if (db) {
             const replicationStatus = db.replicationStatus
             console.info({ replicationStatus })
-            if (replicationStatus.progress === replicationStatus.max && replicationStatus.max > 0) {
+            const { progress, max, queued } = replicationStatus
+            if (progress === max && max > 0 && queued === 0) {
               console.info('Fully replicated')
               const dbKeys = Object.keys(db.all)
               console.info(`Keys in db: ${dbKeys.length}`)
+              const sample = []
+              while (sample.length < 10) {
+                const rk = dbKeys[Math.floor(Math.random() * dbKeys.length)]
+                const sk = db.get(rk)
+                if (!(sk in sample)) sample.push(sk)
+              }
+              console.info(`Sample: ${sample}`)
               shutdown()
             }
           }
