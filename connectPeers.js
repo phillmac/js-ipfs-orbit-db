@@ -17,7 +17,7 @@ const connectPeers = function (options) {
               try {
                 console.info(`Connecting ${a}`)
                 await ipfs.swarm.connect(a)
-                console.info(`Connected ${prov.id}`)
+                console.info(`Connected ${provId}`)
                 break
               } catch (err) { console.log(err) }
             }
