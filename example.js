@@ -63,8 +63,8 @@ function example (ipfs, stopIpfs) {
           const db = dbMan.get('keyvalue_test')
           if (db) {
             const replicationStatus = db.replicationStatus
-            console.info({ replicationStatus })
             const { progress, max, queued } = replicationStatus
+            if (progress > 0) console.info({ replicationStatus })
             if (progress === max && max > 0 && queued === 0) {
               console.info('Fully replicated')
               const dbKeys = Object.keys(db.all)
