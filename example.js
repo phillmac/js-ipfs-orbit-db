@@ -75,7 +75,7 @@ function example (ipfs, stopIpfs) {
                 const sk = db.get(rk)
                 if (!(rk in sample)) sample[rk] = sk
               }
-              console.info(`Sample: ${sample}`)
+              console.info(`Sample: ${JSON.stringify(sample, null, 2)}`)
               shutdown()
             }
           }
