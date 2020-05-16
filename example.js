@@ -68,11 +68,11 @@ function example (ipfs, stopIpfs) {
               console.info('Fully replicated')
               const dbKeys = Object.keys(db.all)
               console.info(`Keys in db: ${dbKeys.length}`)
-              const sample = []
+              const sample = {}
               while (sample.length < 10) {
                 const rk = dbKeys[Math.floor(Math.random() * dbKeys.length)]
                 const sk = db.get(rk)
-                if (!(sk in sample)) sample.push(sk)
+                if (!(sk in sample)) sample[rk] = sk
               }
               console.info(`Sample: ${sample}`)
               shutdown()
