@@ -70,11 +70,10 @@ function example (ipfs, stopIpfs) {
               const dbKeys = Object.keys(db.all)
               console.info(`Keys in db: ${dbKeys.length}`)
               const sample = {}
-              while (sample.length < 3) {
+              while (sample.keys().length < 3) {
                 const rk = dbKeys[Math.floor(Math.random() * dbKeys.length)]
                 const sk = db.get(rk)
                 if (!(sample.contains(sk))) sample[sk] = rk
-                console.log({ sk, rk, sample: sample[sk] })
               }
               console.info(`Sample: ${JSON.stringify(sample, null, 2)}`)
               shutdown()
