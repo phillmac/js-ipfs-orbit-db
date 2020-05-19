@@ -72,8 +72,8 @@ function example (ipfs, stopIpfs) {
               try {
                 while (Object.keys(sample).length < 3) {
                   const rk = dbKeys[Math.floor(Math.random() * dbKeys.length)]
-                  const sk = db.get(rk)
-                  if (!(sk in sample)) sample[sk] = rk
+                  const sv = db.get(rk)
+                  if (!(rk in sample)) sample[rk] = sv
                 }
                 console.info(`Sample: ${JSON.stringify(sample, null, 2)}`)
               } catch (err) {
