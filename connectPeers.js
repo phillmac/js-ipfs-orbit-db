@@ -1,6 +1,9 @@
+let lockout = false
 const connectPeers = function (options) {
   const { ipfs, peerMan, ipfsID } = options
   return async (db) => {
+    if(lockout) throw new Error('lockout')
+    lockout=true
     console.info('Connecting peers')
     let peers
     try {
@@ -27,6 +30,7 @@ const connectPeers = function (options) {
         console.error('Error while connecting peers', err)
       }
     }
+    lockout=false
     console.info('Done')
   }
 }
