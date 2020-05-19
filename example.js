@@ -55,7 +55,6 @@ function example (ipfs, stopIpfs) {
       }
     }
 
-    // orbitdb.events.on('replicate.progress', (_addr, address, hash, entry, progress, have) => console.info('replicate.progress:', { address, hash, entry, progress, have }))
     orbitdb.events.once('ready', (...args) => {
       console.dir(args)
       setInterval(() => {
