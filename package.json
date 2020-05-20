@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "go-ipfs-dep": "^0.4.23-3",
-    "ipfs": "0.43.3",
+    "ipfs": "~0.44.0",
     "ipfs-http-client": "^44.0.3",
     "ipfsd-ctl": "^4.1.0",
     "orbit-db": "github:phillmac/orbit-db",
