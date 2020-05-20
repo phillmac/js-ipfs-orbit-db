@@ -16,7 +16,6 @@ async function run () {
   })
   await ipfs.config.profiles.apply('server')
   await ipfs.config.set('Swarm.AddrFilters', ['/ip6/::1/ipcidr/0'])
-  console.log(await ipfs.config.get())
   await ipfs.start()
   await ipfs.ready
 
