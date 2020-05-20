@@ -6,6 +6,12 @@ async function run () {
     repo: './js-ipfs',
     start: false,
     EXPERIMENTAL: { pubsub: true },
+    config: {
+      Addresses: {
+        Swarm: ['/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star'
+        ]
+      }
+    },
     libp2p: { config: { dht: { enabled: true } } },
     relay: {
       enabled: true, // enable relay dialer/listener (STOP)
@@ -14,8 +20,8 @@ async function run () {
       }
     }
   })
-  await ipfs.config.profiles.apply('server')
-  await ipfs.config.set('Swarm.AddrFilters', ['/ip6/::1/ipcidr/0'])
+
+  //   await ipfs.config.profiles.apply('server')
   await ipfs.start()
   await ipfs.ready
 

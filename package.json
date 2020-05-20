@@ -10,11 +10,12 @@
   },
   "dependencies": {
     "go-ipfs-dep": "^0.4.23-3",
-    "ipfs": "~0.44.0",
+    "ipfs": "~0.40.0",
     "ipfs-http-client": "^44.0.3",
     "ipfsd-ctl": "^4.1.0",
     "orbit-db": "github:phillmac/orbit-db",
-    "orbit-db-managers": "github:phillmac/orbit-db-managers"
+    "orbit-db-managers": "github:phillmac/orbit-db-managers",
+    "peer-book": "^0.9.2"
   },
   "license": "MIT",
   "keywords": [

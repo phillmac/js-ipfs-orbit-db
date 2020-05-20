@@ -1,6 +1,13 @@
 const OrbitDB = require('orbit-db')
 const { PeerManager, DBManager } = require('orbit-db-managers')
-const PeerStore = require('libp2p/src/peer-store')
+
+const PeerStore = (() => {
+  try {
+    return require('libp2p/src/peer-store')
+  } catch (err) {}
+
+  return require('peer-book')
+})()
 const PeerId = require('peer-id')
 const PeerInfo = require('peer-info')
 const multiaddr = require('multiaddr')
