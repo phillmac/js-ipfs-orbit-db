@@ -58,6 +58,7 @@ function example (ipfs, stopIpfs) {
     orbitdb.events.once('ready', (...args) => {
       console.dir(args)
       let prevReplication = {}
+      const entries = {}
       setInterval(async () => {
         try {
           const db = dbMan.get('keyvalue_test')
@@ -65,7 +66,7 @@ function example (ipfs, stopIpfs) {
             const replicationStatus = db.replicationStatus
 
             if (!(hasChanged(prevReplication, replicationStatus))) {
-              //return
+              // return
             }
 
             prevReplication = replicationStatus
@@ -78,13 +79,14 @@ function example (ipfs, stopIpfs) {
               const nexts = Object.keys(headsIndex)
 
               const fetchNext = async (nList) => {
-                for( const h of nList) {
-                const value = (await ipfs.dag.get(h)).value
-                const vnext = value.next.map(cid => cid.toString())
-                const vrefs = (value.refs || []).map(cid => cid.toString())
-                console.dir({ h, value,vnext,vrefs})
-                console.dir(db.replicationStatus)
-                await fetchNext(vnext)
+                for (const h of nList) {
+                  if (h in entries) continue
+                  entries[h] = (await ipfs.dag.get(h)).value
+                  const vnext = entries[h].next.map(cid => cid.toString())
+                  const vrefs = (entries[h].refs || []).map(cid => cid.toString())
+                  console.dir({ h, value: entries[h], vnext, vrefs })
+                  console.dir(db.replicationStatus)
+                  await fetchNext(vnext)
                 }
               }
               await fetchNext(nexts)
