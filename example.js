@@ -71,7 +71,8 @@ function example (ipfs, stopIpfs) {
             prevReplication = replicationStatus
 
             const { progress, max, queued } = replicationStatus
-            if (progress > 0) console.info({ replicationStatus })
+            const queue = db.replicator._queue
+            if (progress > 0) console.info({ replicationStatus, queue })
             if (progress === max && max > 0 && queued === 0) {
               console.info('Fully replicated')
               const dbKeys = Object.keys(db.all)
