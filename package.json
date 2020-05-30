@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "js-debug": "LOG=\"DEBUG\" node js-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
-    "go-debug": "LOG=\"DEBUG\" node go-ipfs.js | tee ~/go_log_$(date \"+%s\").txt",
-    "js": "node js-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
-    "go": "node go-ipfs.js | tee ~/go_log_$(date \"+%s\").txt"
+    "js-debug": "LOG=\"DEBUG\" node --trace-warnings js-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
+    "go-debug": "LOG=\"DEBUG\" node --trace-warnings go-ipfs.js | tee ~/go_log_$(date \"+%s\").txt",
+    "js": "node --trace-warnings js-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
+    "go": "node --trace-warnings go-ipfs.js | tee ~/go_log_$(date \"+%s\").txt"
   },
   "dependencies": {
     "go-ipfs-dep": "^0.4.23-3",
