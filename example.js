@@ -57,11 +57,19 @@ function example (ipfs, stopIpfs) {
 
     orbitdb.events.once('ready', (...args) => {
       console.dir(args)
+      let prevReplication = {}
       setInterval(() => {
         try {
           const db = dbMan.get('keyvalue_test')
           if (db) {
             const replicationStatus = db.replicationStatus
+
+            if(!hasChanged(prevReplication, replicationStatus)){
+                return
+            }
+
+            prevReplication = replicationStatus
+
             const { progress, max, queued } = replicationStatus
             if (progress > 0) console.info({ replicationStatus })
             if (progress === max && max > 0 && queued === 0) {
@@ -90,5 +98,22 @@ function example (ipfs, stopIpfs) {
     })
   }
 }
+
+const hasChanged = (obj1, obj2) => {
+  const obj1Keys = Object.keys(obj1);
+  const obj2Keys = Object.keys(obj2);
+
+  if (obj1Keys.length !== obj2Keys.length) {
+    return false;
+  }
+
+  for (const objKey of obj1Keys) {
+    if (obj1[objKey] !== obj2[objKey]) {
+      return false;
+    }
+  }
+
+  return true;
+};
 
 module.exports = example
