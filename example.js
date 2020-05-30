@@ -83,7 +83,7 @@ function example (ipfs, stopIpfs) {
                 const vnext = value.next.map(cid => cid.toString())
                 const vrefs = (value.refs || []).map(cid => cid.toString())
                 console.dir({ h, value,vnext,vrefs})
-                console.dir(dbMan.get('keyvalue_test').replicationStatus)
+                console.dir(db.replicationStatus)
                 await fetchNext(vnext)
                 }
               }
