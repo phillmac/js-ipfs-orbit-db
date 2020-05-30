@@ -76,7 +76,6 @@ function example (ipfs, stopIpfs) {
               const buffer = db._replicator._buffer[0] || {}
               const headsIndex = buffer._headsIndex
               const nexts = Object.keys(headsIndex)
-              console.dir({ replicationStatus})
 
               const fetchNext = async (nList) => {
                 for( const h of nList) {
@@ -84,6 +83,7 @@ function example (ipfs, stopIpfs) {
                 const vnext = value.next.map(cid => cid.toString())
                 const vrefs = (value.refs || []).map(cid => cid.toString())
                 console.dir({ h, value,vnext,vrefs})
+                console.dir(dbMan.get('keyvalue_test').replicationStatus)
                 await fetchNext(vnext)
                 }
               }
