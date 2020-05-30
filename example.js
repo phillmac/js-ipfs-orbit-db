@@ -58,21 +58,37 @@ function example (ipfs, stopIpfs) {
     orbitdb.events.once('ready', (...args) => {
       console.dir(args)
       let prevReplication = {}
-      setInterval(() => {
+      setInterval(async () => {
         try {
           const db = dbMan.get('keyvalue_test')
           if (db) {
             const replicationStatus = db.replicationStatus
 
             if (!(hasChanged(prevReplication, replicationStatus))) {
-              return
+              //return
             }
 
             prevReplication = replicationStatus
 
             const { progress, max, queued } = replicationStatus
-            const queue = db.replicator._queue
-            if (progress > 0) console.info({ replicationStatus, queue })
+
+            if (progress > 0) {
+              const buffer = db._replicator._buffer[0] || {}
+              const headsIndex = buffer._headsIndex
+              const nexts = Object.keys(headsIndex)
+              console.dir({ replicationStatus})
+
+              const fetchNext = async (nList) => {
+                for( const h of nList) {
+                const value = (await ipfs.dag.get(h)).value
+                const vnext = value.next.map(cid => cid.toString())
+                const vrefs = (value.refs || []).map(cid => cid.toString())
+                console.dir({ h, value,vnext,vrefs})
+                await fetchNext(vnext)
+                }
+              }
+              await fetchNext(nexts)
+            }
             if (progress === max && max > 0 && queued === 0) {
               console.info('Fully replicated')
               const dbKeys = Object.keys(db.all)
@@ -105,16 +121,16 @@ const hasChanged = (obj1, obj2) => {
   const obj2Keys = Object.keys(obj2)
 
   if (obj1Keys.length !== obj2Keys.length) {
-    return false
+    return true
   }
 
   for (const objKey of obj1Keys) {
     if (obj1[objKey] !== obj2[objKey]) {
-      return false
+      return true
     }
   }
 
-  return true
+  return false
 }
 
 module.exports = example
