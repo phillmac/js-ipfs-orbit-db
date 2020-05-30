@@ -84,7 +84,7 @@ function example (ipfs, stopIpfs) {
                   entries[h] = (await ipfs.dag.get(h)).value
                   const vnext = entries[h].next.map(cid => cid.toString())
                   const vrefs = (entries[h].refs || []).map(cid => cid.toString())
-                  console.dir({ h, value: entries[h], vnext, vrefs })
+                  console.dir({ h, value: entries[h], vnext, vrefs, replicationStatus: db.replicationStatus, entries:Object.keys(entries).length })
                   console.dir(db.replicationStatus)
                   await fetchNext(vnext)
                 }
