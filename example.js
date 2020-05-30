@@ -64,8 +64,8 @@ function example (ipfs, stopIpfs) {
           if (db) {
             const replicationStatus = db.replicationStatus
 
-            if(!hasChanged(prevReplication, replicationStatus)){
-                return
+            if (!hasChanged(prevReplication, replicationStatus)) {
+              return
             }
 
             prevReplication = replicationStatus
@@ -100,20 +100,20 @@ function example (ipfs, stopIpfs) {
 }
 
 const hasChanged = (obj1, obj2) => {
-  const obj1Keys = Object.keys(obj1);
-  const obj2Keys = Object.keys(obj2);
+  const obj1Keys = Object.keys(obj1)
+  const obj2Keys = Object.keys(obj2)
 
   if (obj1Keys.length !== obj2Keys.length) {
-    return false;
+    return false
   }
 
   for (const objKey of obj1Keys) {
     if (obj1[objKey] !== obj2[objKey]) {
-      return false;
+      return false
     }
   }
 
-  return true;
-};
+  return true
+}
 
 module.exports = example
