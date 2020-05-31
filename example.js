@@ -52,11 +52,11 @@ function example (ipfs, stopIpfs) {
         success = true
         setInterval(async () => {
           const peers = await ipfs.pubsub.peers(db.id)
-          if(peers.length < 1){
+          if (peers.length < 1) {
             connectPeers(db)
           }
         }, 30 * 1000)
-        //connectPeers(db)
+        // connectPeers(db)
       } catch (err) {
         console.error(err)
       }
