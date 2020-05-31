@@ -10,23 +10,25 @@ function example (ipfs, stopIpfs) {
   return async () => {
     const ipfsID = (await ipfs.id()).id
     console.info('ipfs id:', ipfsID)
-    const orbitdb = await OrbitDB.createInstance(ipfs, { directory: 'go-ipfs-orbitdb' })
-    const peerMan = new PeerManager(ipfs, orbitdb, {
+    const orbitDB = await OrbitDB.createInstance(ipfs, { directory: 'go-ipfs-orbitdb' })
+    const peerMan = new PeerManager({
+      ipfs,
+      orbitDB,
       PeerId,
       PeerInfo,
       multiaddr,
       PeerStore,
       EventEmitter,
-      logger: console
+      options: { logger: console }
 
     })
 
-    const dbMan = new DBManager(orbitdb, peerMan, { logger: console })
+    const dbMan = new DBManager({ orbitDB, peerMan, options: { logger: console } })
 
     const shutdown = async () => {
       console.info('Stopping...')
       try {
-        await orbitdb.stop()
+        await orbitDB.stop()
         await stopIpfs()
       } catch (err) {
         console.error(err)
@@ -55,7 +57,7 @@ function example (ipfs, stopIpfs) {
       }
     }
 
-    orbitdb.events.once('ready', (...args) => {
+    orbitDB.events.once('ready', (...args) => {
       console.dir(args)
       let prevReplication = {}
       setInterval(() => {
