@@ -50,8 +50,13 @@ function example (ipfs, stopIpfs) {
           { awaitOpen: false, relayEvents: ['ready', 'replicate.progress', 'replicated'] }
         )
         success = true
-        setInterval(() => connectPeers(db), 300 * 1000)
-        connectPeers(db)
+        setInterval(async () => {
+          const peers = await ipfs.pubsub.peers(db.id)
+          if(peers.length < 1){
+            connectPeers(db)
+          }
+        }, 30 * 1000)
+        //connectPeers(db)
       } catch (err) {
         console.error(err)
       }
