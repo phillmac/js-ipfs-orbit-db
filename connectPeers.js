@@ -18,7 +18,7 @@ const connectPeers = function (options) {
       try {
         for (const prov of await peerMan.findPeers(db).search) {
           const provId = prov.id.toB58String()
-          if (provId !== ipfsID && !(peers.some((p) => provId === p.peer))) {
+          if (provId !== ipfsID && !(peers.some((p) => provId === p.peer)) && prov.multiaddrs.toArray().length < 0) {
             const provAddrs = [] //
             // provAddrs.concat(prov.multiaddrs.toArray().map(a => `${a.toString()}/ipfs/${provId}`))
             provAddrs.push(`/ipfs/${provId}`)
