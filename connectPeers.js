@@ -16,11 +16,19 @@ const connectPeers = function (options) {
     }
     if (peers) {
       try {
-        for (const prov of await peerMan.findPeers(db).search) {
-          const provId = prov.id.toB58String()
+        for await (const prov of ipfs.dht.findProvs(db.address.root)) {
+        // for (const prov of await peerMan.findPeers(db).search) {
+          console.dir(prov)
+          const provId = typeof prov.id === 'string' ? prov.id : prov.id.toB58String()
           if (provId !== ipfsID && !(peers.some((p) => provId === p.peer))) {
-            if (prov.multiaddrs.toArray().length < 0) {
-              const provAddrs = [] //
+            let provAddrs = []
+            if (prov.multiaddrs && prov.multiaddrs.toArray()) {
+              provAddrs = prov.multiaddrs.toArray()
+            } else if (prov.addrs) {
+              provAddrs = prov.addrs
+            }
+            if (provAddrs.length < 0) {
+              provAddrs = []
               // provAddrs.concat(prov.multiaddrs.toArray().map(a => `${a.toString()}/ipfs/${provId}`))
               provAddrs.push(`/ipfs/${provId}`)
               provAddrs.push(`/p2p-circuit/ipfs/${provId}`)
