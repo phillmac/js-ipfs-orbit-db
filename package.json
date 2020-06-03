@@ -3,15 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "js-debug": "LOG=\"DEBUG\" node --trace-warnings js-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
-    "go-debug": "LOG=\"DEBUG\" node --trace-warnings go-ipfs.js | tee ~/go_log_$(date \"+%s\").txt",
+    "api": "node --trace-warnings api-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
     "js": "node --trace-warnings js-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
-    "go": "node --trace-warnings go-ipfs.js | tee ~/go_log_$(date \"+%s\").txt"
+    "go": "node --trace-warnings go-ipfs.js | tee ~/go_log_$(date \"+%s\").txt",
+    "api-debug": "LOG=\"DEBUG\" node --trace-warnings js-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
+    "js-debug": "LOG=\"DEBUG\" node --trace-warnings js-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
+    "go-debug": "LOG=\"DEBUG\" node --trace-warnings go-ipfs.js | tee ~/go_log_$(date \"+%s\").txt"
   },
   "dependencies": {
     "go-ipfs-dep": "^0.5.1",
     "ipfs": "^0.45.0",
-    "ipfs-http-client": "^44.0.3",
+    "ipfs-http-client": "^44.1.1",
     "ipfsd-ctl": "^4.1.0",
     "orbit-db": "github:phillmac/orbit-db",
     "orbit-db-managers": "github:phillmac/orbit-db-managers"
