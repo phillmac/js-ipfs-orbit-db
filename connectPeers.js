@@ -6,14 +6,16 @@ const connectPeers = function (options) {
   const { ipfs, peerMan, ipfsID } = options
 
   const doConnect = async (provAddrs, provId) => {
-    for (const a of provAddrs) {
-      try {
-        console.info(`Connecting ${a}`)
-        await ipfs.swarm.connect(a)
-        console.info(`Connected ${provId}`)
-        break
-      } catch (err) { }
-    }
+    return (pQueue.add(async () => {
+      for (const a of provAddrs) {
+        try {
+          console.info(`Connecting ${a}`)
+          await ipfs.swarm.connect(a, { timeout: 15 * 1000 })
+          console.info(`Connected ${provId}`)
+          break
+        } catch (err) { }
+      }
+    }))()
   }
 
   const connectPeer = (provId) => {
@@ -38,7 +40,7 @@ const connectPeers = function (options) {
     }
     if (peers) {
       try {
-        for await (const prov of ipfs.dht.findProvs(db.address.root, {timeout: 15 * 1000})) {
+        for await (const prov of ipfs.dht.findProvs(db.address.root, { timeout: 15 * 1000 })) {
         // for (const prov of await peerMan.findPeers(db).search) {
           console.dir(prov)
           const provId = typeof prov.id === 'string' ? prov.id : prov.id.toB58String()
@@ -52,19 +54,22 @@ const connectPeers = function (options) {
             if (provAddrs.length < 0) {
               // provAddrs.concat(prov.multiaddrs.toArray().map(a => `${a.toString()}/ipfs/${provId}`))
 
-              pQueue.add(connectPeer(provId))
+              connectPeer(provId)
             } else {
               try {
                 console.info(`Resolving peer ${provId}`)
-                const foundPeer = await ipfs.dht.findPeer(provId, {timeout: 15 * 1000})
+                const doFindPeer = () => {
+
+                }
+                const foundPeer = await ipfs.dht.findPeer(provId, { timeout: 15 * 1000 })
                 if (foundPeer.addrs.length < 0) {
                   console.info(`Skipping ${provId}: no addrs available`)
                   continue
                 }
                 console.dir(foundPeer)
-                pQueue.add(connectPeer(provId))
+                connectPeer(provId)
               } catch (err) {
-                //console.error(err)
+                // console.error(err)
               }
             }
           }
@@ -73,7 +78,7 @@ const connectPeers = function (options) {
         console.error('Error while connecting peers', err)
       }
     } else {
-        console.debug('No peers available')
+      console.debug('No peers available')
     }
     lockout = false
     console.info('Done')
