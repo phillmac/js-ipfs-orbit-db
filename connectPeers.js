@@ -62,6 +62,7 @@ const connectPeers = function (options) {
                   continue
                 }
                 console.dir(foundPeer)
+                pQueue.add(connectPeer(provId))
               } catch (err) {
                 //console.error(err)
               }
