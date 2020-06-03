@@ -1,6 +1,28 @@
+const { default: PQueue } = require('p-queue')
+const pQueue = new PQueue({ concurrency: 1 })
+
 let lockout = false
 const connectPeers = function (options) {
   const { ipfs, peerMan, ipfsID } = options
+
+  const doConnect = async (provAddrs, provId) => {
+    for (const a of provAddrs) {
+      try {
+        console.info(`Connecting ${a}`)
+        await ipfs.swarm.connect(a)
+        console.info(`Connected ${provId}`)
+        break
+      } catch (err) { }
+    }
+  }
+
+  const connectPeer = (provId) => {
+    return doConnect([
+      `/ipfs/${provId}`,
+      `/p2p-circuit/ipfs/${provId}`
+    ], provId)
+  }
+
   return async (db) => {
     if (lockout) {
       console.warn('connectPeers lockout')
@@ -16,7 +38,7 @@ const connectPeers = function (options) {
     }
     if (peers) {
       try {
-        for await (const prov of ipfs.dht.findProvs(db.address.root)) {
+        for await (const prov of ipfs.dht.findProvs(db.address.root, {timeout: 15 * 1000})) {
         // for (const prov of await peerMan.findPeers(db).search) {
           console.dir(prov)
           const provId = typeof prov.id === 'string' ? prov.id : prov.id.toB58String()
@@ -28,26 +50,29 @@ const connectPeers = function (options) {
               provAddrs = prov.addrs
             }
             if (provAddrs.length < 0) {
-              provAddrs = []
               // provAddrs.concat(prov.multiaddrs.toArray().map(a => `${a.toString()}/ipfs/${provId}`))
-              provAddrs.push(`/ipfs/${provId}`)
-              provAddrs.push(`/p2p-circuit/ipfs/${provId}`)
-              for (const a of provAddrs) {
-                try {
-                  console.info(`Connecting ${a}`)
-                  await ipfs.swarm.connect(a)
-                  console.info(`Connected ${provId}`)
-                  break
-                } catch (err) { }
-              }
+
+              pQueue.add(connectPeer(provId))
             } else {
-              console.info(`Skipping ${provId}: no addrs available`)
+              try {
+                console.info(`Resolving peer ${provId}`)
+                const foundPeer = await ipfs.dht.findPeer(provId, {timeout: 15 * 1000})
+                if (foundPeer.addrs.length < 0) {
+                  console.info(`Skipping ${provId}: no addrs available`)
+                  continue
+                }
+                console.dir(foundPeer)
+              } catch (err) {
+                console.error(err)
+              }
             }
           }
         }
       } catch (err) {
         console.error('Error while connecting peers', err)
       }
+    } else {
+        console.debug('No peers available')
     }
     lockout = false
     console.info('Done')
