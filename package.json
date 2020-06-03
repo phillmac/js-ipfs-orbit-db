@@ -9,7 +9,7 @@
     "go": "node --trace-warnings go-ipfs.js | tee ~/go_log_$(date \"+%s\").txt"
   },
   "dependencies": {
-    "go-ipfs-dep": "^0.4.23-3",
+    "go-ipfs-dep": "^0.5.1",
     "ipfs": "^0.45.0",
     "ipfs-http-client": "^44.0.3",
     "ipfsd-ctl": "^4.1.0",
