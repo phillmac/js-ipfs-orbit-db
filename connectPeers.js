@@ -63,7 +63,7 @@ const connectPeers = function (options) {
                 }
                 console.dir(foundPeer)
               } catch (err) {
-                console.error(err)
+                //console.error(err)
               }
             }
           }
