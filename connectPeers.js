@@ -6,7 +6,7 @@ const connectPeers = function (options) {
   const { ipfs, peerMan, ipfsID } = options
 
   const doConnect = async (provAddrs, provId) => {
-    return (pQueue.add(async () => {
+    return pQueue.add(async () => {
       for (const a of provAddrs) {
         try {
           console.info(`Connecting ${a}`)
@@ -15,7 +15,7 @@ const connectPeers = function (options) {
           break
         } catch (err) { }
       }
-    }))()
+    })
   }
 
   const connectPeer = (provId) => {
