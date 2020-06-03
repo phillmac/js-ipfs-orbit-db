@@ -58,9 +58,6 @@ const connectPeers = function (options) {
             } else {
               try {
                 console.info(`Resolving peer ${provId}`)
-                const doFindPeer = () => {
-
-                }
                 const foundPeer = await ipfs.dht.findPeer(provId, { timeout: 15 * 1000 })
                 if (foundPeer.addrs.length < 0) {
                   console.info(`Skipping ${provId}: no addrs available`)
