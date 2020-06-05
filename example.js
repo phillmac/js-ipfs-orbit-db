@@ -1,4 +1,3 @@
-const OrbitDB = require('orbit-db')
 const getManagers = require('./managers.js')
 
 function example (ipfs, stopIpfs) {
