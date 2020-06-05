@@ -5,7 +5,7 @@ function example (ipfs, stopIpfs) {
   return async () => {
     const ipfsID = (await ipfs.id()).id
     console.info('ipfs id:', ipfsID)
-    const { peerMan, dbMan, orbitDB } = getManagers({ ipfs })
+    const { peerMan, dbMan, orbitDB } = await getManagers({ ipfs })
 
     const shutdown = async () => {
       console.info('Stopping...')

@@ -1,4 +1,4 @@
-const pMap = require('p-map');
+const pMap = require('p-map')
 const PeerId = require('peer-id')
 const OrbitDB = require('orbit-db')
 const Logger = require('logplease')
@@ -17,10 +17,10 @@ const deps = {
   PeerInfo,
   PeerStore,
   pMap,
-  PQueue,
+  PQueue
 }
 
-const getManagers = async (ipfs, options) => {
+const getManagers = async (ipfs, options = {}) => {
   const orbitDB = await OrbitDB.createInstance(ipfs, options.orbitDB)
   const peerMan = new PeerManager({ ipfs, orbitDB, ...deps, options })
   return {
