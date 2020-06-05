@@ -47,7 +47,7 @@ function example (ipfs, stopIpfs) {
       try {
         const db = await dbMan.openCreate(
           '/orbitdb/zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5/keyvalue_test',
-          { awaitOpen: false, relayEvents: ['ready', 'replicate.progress', 'replicated'] }
+          { awaitOpen: false, fetchEntryTimeout: 30000,relayEvents: ['ready', 'replicate.progress', 'replicated'] }
         )
         success = true
         setInterval(async () => {
