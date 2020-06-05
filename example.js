@@ -5,6 +5,7 @@ function example (ipfs, stopIpfs) {
     const ipfsID = (await ipfs.id()).id
     console.info('ipfs id:', ipfsID)
     const { peerMan, dbMan, orbitDB } = await getManagers(ipfs)
+    const connectPeers = require('./connectPeers.js')({ ipfs, peerMan, ipfsID })
 
     const shutdown = async () => {
       console.info('Stopping...')
@@ -20,8 +21,6 @@ function example (ipfs, stopIpfs) {
 
     process.on('SIGINT', shutdown)
     process.on('beforeExit', shutdown)
-
-    const connectPeers = require('./connectPeers.js')({ ipfs, peerMan, ipfsID })
 
     let success = false
     while (!success) {
