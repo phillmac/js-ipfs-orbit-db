@@ -1,29 +1,11 @@
 const OrbitDB = require('orbit-db')
-const { PeerManager, DBManager } = require('orbit-db-managers')
-const PeerStore = require('libp2p/src/peer-store')
-const PeerId = require('peer-id')
-const PeerInfo = require('peer-info')
-const multiaddr = require('multiaddr')
-const { EventEmitter } = require('events')
+const getManagers = require('./managers.js')
 
 function example (ipfs, stopIpfs) {
   return async () => {
     const ipfsID = (await ipfs.id()).id
     console.info('ipfs id:', ipfsID)
-    const orbitDB = await OrbitDB.createInstance(ipfs, { directory: 'go-ipfs-orbitdb' })
-    const peerMan = new PeerManager({
-      ipfs,
-      orbitDB,
-      PeerId,
-      PeerInfo,
-      multiaddr,
-      PeerStore,
-      EventEmitter,
-      options: { logger: console }
-
-    })
-
-    const dbMan = new DBManager({ orbitDB, peerMan, options: { logger: console } })
+    const { peerMan, dbMan, orbitDB } = getManagers({ ipfs })
 
     const shutdown = async () => {
       console.info('Stopping...')
@@ -47,7 +29,7 @@ function example (ipfs, stopIpfs) {
       try {
         const db = await dbMan.openCreate(
           '/orbitdb/zdpuAuSAkDDRm9KTciShAcph2epSZsNmfPeLQmxw6b5mdLmq5/keyvalue_test',
-          { awaitOpen: false, fetchEntryTimeout: 30000,relayEvents: ['ready', 'replicate.progress', 'replicated'] }
+          { awaitOpen: false, fetchEntryTimeout: 30000, relayEvents: ['ready', 'replicate.progress', 'replicated'] }
         )
         success = true
         setInterval(async () => {
