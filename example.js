@@ -43,19 +43,21 @@ function example (ipfs, stopIpfs) {
     }
 
     orbitDB.events.once('open', (...args) => {
+      const eventsQueue = []
       try {
         const db = dbMan.get('keyvalue_test')
         console.info('Caught open event')
         for (const eventType in ['load.added', 'load.progress', 'load.end']) {
-          db._replicator.on(eventType, (...args) => console.info({ origin: 'replicator', type: eventType, db: db.id, ...args }))
+          db._replicator.on(eventType, (...args) => eventsQueue.push({ origin: 'replicator', type: eventType, db: db.id, ...args }))
         }
 
         for (const eventType in ['ready', 'load', 'load.progress.start', 'load.progress', 'replicate', 'replicated', 'log.op', 'replicated.progress', 'peer']) {
-          db.events.on(eventType, (...args) => console.info({ origin: 'store', type: eventType, db: db.id, ...args }))
+          db.events.on(eventType, (...args) => eventsQueue.push({ origin: 'store', type: eventType, db: db.id, ...args }))
         }
       } catch (err) {
         console.error(err)
       }
+      setInterval(() => console.dir({ event: eventsQueue.pop() || 'No events in queue' }), 1000)
     })
 
     orbitDB.events.once('ready', (...args) => {
