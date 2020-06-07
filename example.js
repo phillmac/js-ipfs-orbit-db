@@ -47,11 +47,11 @@ function example (ipfs, stopIpfs) {
         const db = dbMan.get('keyvalue_test')
         console.info('Caught open event')
         for (const eventType in ['load.added', 'load.progress', 'load.end']) {
-          db._replicator.on(eventType, (...args) => console.log({ origin: 'replicator', type: eventType, db: db.id, ...args }))
+          db._replicator.on(eventType, (...args) => console.info({ origin: 'replicator', type: eventType, db: db.id, ...args }))
         }
 
         for (const eventType in ['ready', 'load', 'load.progress.start', 'load.progress', 'replicate', 'replicated', 'log.op', 'replicated.progress', 'peer']) {
-          db.events.on(eventType, (...args) => console.log({ type: eventType, db: db.id, ...args }))
+          db.events.on(eventType, (...args) => console.info({ type: eventType, db: db.id, ...args }))
         }
       } catch (err) {
         console.error(err)
