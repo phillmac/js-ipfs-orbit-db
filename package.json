@@ -14,7 +14,8 @@
     "ipfs-http-client": "^44.1.1",
     "libp2p": "^0.28.0",
     "orbit-db": "github:phillmac/orbit-db",
-    "orbit-db-managers": "github:phillmac/orbit-db-managers"
+    "orbit-db-managers": "github:phillmac/orbit-db-managers",
+    "peer-info": "^0.17.5"
   },
   "license": "MIT",
   "keywords": [
