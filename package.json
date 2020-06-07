@@ -6,7 +6,7 @@
     "api": "node --trace-warnings api-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
     "js": "node --trace-warnings js-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
     "go": "node --trace-warnings go-ipfs.js | tee ~/go_log_$(date \"+%s\").txt",
-    "api-debug": "LOG=\"DEBUG\" node --trace-warnings js-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
+    "api-debug": "LOG=\"DEBUG\" node --trace-warnings api-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
     "js-debug": "LOG=\"DEBUG\" node --trace-warnings js-ipfs.js | tee ~/js_log_$(date \"+%s\").txt",
     "go-debug": "LOG=\"DEBUG\" node --trace-warnings go-ipfs.js | tee ~/go_log_$(date \"+%s\").txt"
   },
