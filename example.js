@@ -51,7 +51,7 @@ function example (ipfs, stopIpfs) {
         }
 
         for (const eventType in ['ready', 'load', 'load.progress.start', 'load.progress', 'replicate', 'replicated', 'log.op', 'replicated.progress', 'peer']) {
-          db.events.on(eventType, (...args) => console.info({ type: eventType, db: db.id, ...args }))
+          db.events.on(eventType, (...args) => console.info({ origin: 'store', type: eventType, db: db.id, ...args }))
         }
       } catch (err) {
         console.error(err)
