@@ -57,7 +57,10 @@ function example (ipfs, stopIpfs) {
       } catch (err) {
         console.error(err)
       }
-      setInterval(() => console.dir({ event: eventsQueue.pop() || 'No events in queue' }), 1000)
+      setInterval(() => {
+        const event = eventsQueue.pop()
+        if (event) console.dir(event)
+      })
     })
 
     orbitDB.events.once('ready', (...args) => {
