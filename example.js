@@ -42,6 +42,10 @@ function example (ipfs, stopIpfs) {
       }
     }
 
+    orbitDB.events.once('open', (...args) => {
+        console.dir({args})
+    })
+
     orbitDB.events.once('ready', (...args) => {
       console.dir(args)
       let prevReplication = {}
