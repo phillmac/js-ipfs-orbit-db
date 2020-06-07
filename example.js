@@ -45,10 +45,9 @@ function example (ipfs, stopIpfs) {
     orbitDB.events.once('open', (...args) => {
       try {
         const db = dbMan.get('keyvalue_test')
-        if (db) {
-          for (const eventType in ['load.added', 'load.progress', 'load.end']) {
-            db._replicator.on(eventType, (...args) => console.dir({ type: eventType, db: db.id, args }))
-          }
+        console.info('Caught open event')
+        for (const eventType in ['load.added', 'load.progress', 'load.end']) {
+          db._replicator.on(eventType, (...args) => console.dir({ type: eventType, db: db.id, args }))
         }
       } catch (err) {
         console.error(err)
