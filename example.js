@@ -72,12 +72,10 @@ function example (ipfs, stopIpfs) {
             const replicationStatus = db.replicationStatus
 
             if (!(hasChanged(prevReplication, replicationStatus))) {
-              console.info('No change')
-              console.info(prevReplication)
-              // return
+              return
             }
 
-            prevReplication = replicationStatus
+            prevReplication = Object.assign({}, replicationStatus)
 
             const { progress, max, queued } = replicationStatus
             if (progress > 0) console.info({ replicationStatus })
