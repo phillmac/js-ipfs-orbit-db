@@ -50,7 +50,7 @@ function example (ipfs, stopIpfs) {
           db._replicator.on(eventType, (...args) => console.dir({ origin: 'replicator', type: eventType, db: db.id, args }))
         }
 
-        for (const eventType in ['ready', 'load', 'load.progress.start', 'load.progress', 'replicate', 'replicated', 'log.op', 'replicated.progress']) {
+        for (const eventType in ['ready', 'load', 'load.progress.start', 'load.progress', 'replicate', 'replicated', 'log.op', 'replicated.progress', 'peer']) {
           db.events.on(eventType, (...args) => console.dir({ type: eventType, db: db.id, args }))
         }
       } catch (err) {
