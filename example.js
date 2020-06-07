@@ -47,11 +47,11 @@ function example (ipfs, stopIpfs) {
       try {
         const db = dbMan.get('keyvalue_test')
         console.info('Caught open event')
-        for (const eventType in ['load.added', 'load.progress', 'load.end']) {
-          db._replicator.on(eventType, (...args) => eventsQueue.push({ origin: 'replicator', type: eventType, db: db.id, ...args }))
-        }
+        // for (const eventType in ['load.added', 'load.progress', 'load.end']) {
+        //   db._replicator.on(eventType, (...args) => eventsQueue.push({ origin: 'replicator', type: eventType, db: db.id, ...args }))
+        // }
 
-        for (const eventType in ['ready', 'load', 'load.progress.start', 'load.progress', 'replicate', 'replicated', 'log.op', 'replicated.progress', 'peer']) {
+        for (const eventType in ['ready', 'load', 'load.progress.start', 'load.progress', 'replicate', 'replicated', 'log.op', 'replicate.progress', 'peer']) {
           db.events.on(eventType, (...args) => eventsQueue.push({ origin: 'store', type: eventType, db: db.id, ...args }))
         }
       } catch (err) {
@@ -72,7 +72,7 @@ function example (ipfs, stopIpfs) {
             const replicationStatus = db.replicationStatus
 
             if (!(hasChanged(prevReplication, replicationStatus))) {
-              console.info('No change')
+              console.info('No change', prevReplication)
               // return
             }
 
