@@ -47,7 +47,7 @@ function example (ipfs, stopIpfs) {
         const db = dbMan.get('keyvalue_test')
         if (db) {
           for (const eventType in ['load.added', 'load.progress', 'load.end']) {
-            db._replicator.events.on(eventType, (...args) => console.dir({ type: eventType, db: db.id, args }))
+            db._replicator.on(eventType, (...args) => console.dir({ type: eventType, db: db.id, args }))
           }
         }
       } catch (err) {
